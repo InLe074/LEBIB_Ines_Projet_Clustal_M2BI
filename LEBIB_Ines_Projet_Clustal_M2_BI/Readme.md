@@ -1,4 +1,4 @@
-
+# LEBIB_Ines_Projet_Clustal_M2BI
 
 LEBIB Inès - M2 BI                                      
 
@@ -58,7 +58,7 @@ Pour le déroulement optimal de notre script, nous aurons besoin d'avoir des sé
 A partir d'un fichier texte contenant toutes les séquences FASTA à aligner, indiquez le chemin de votre fichier et exécuter cette ligne de commande afin de créer le dicionnaire :
 
 ```
-fasta = lire_fasta('/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt')
+fasta = lire_fasta('/LEBIB_Ines_Projet_Clustal_M2_BI/fichier_fasta.txt')
 print("Les séquences protéiques : " , fasta, "\n")
 
 ```

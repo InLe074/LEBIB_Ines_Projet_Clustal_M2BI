@@ -395,7 +395,7 @@ if __name__ == '__main__':
     gap = -5
     print("La valeur du gap ici vaut : ", gap , "\n")
 
-    fasta = lire_fasta('/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt')
+    fasta = lire_fasta('/LEBIB_Ines_Projet_Clustal_M2_BI/fichier_fasta.txt')
     # print("Les séquences protéiques : " , fasta, "\n")
  
     

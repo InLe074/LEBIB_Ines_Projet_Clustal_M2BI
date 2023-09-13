@@ -164,6 +164,8 @@ pre code {
 </div>
 
 
+<div id="lebib_ines_projet_clustal_m2bi" class="section level1">
+<h1>LEBIB_Ines_Projet_Clustal_M2BI</h1>
 <p>LEBIB Inès - M2 BI</p>
 <p>Projet court Clustal</p>
 <p>13/09/2023</p>
@@ -199,7 +201,7 @@ from scipy.cluster.hierarchy import dendrogram, linkage</code></pre>
 <p>Afin de pouvoir utiliser au mieux le code, certaines fonctions vont être utiles.</p>
 <p>Pour le déroulement optimal de notre script, nous aurons besoin d’avoir des séquences protéiques au format FASTA sous forme de dictionnaire.</p>
 <p>A partir d’un fichier texte contenant toutes les séquences FASTA à aligner, indiquez le chemin de votre fichier et exécuter cette ligne de commande afin de créer le dicionnaire :</p>
-<pre><code>fasta = lire_fasta(&#39;/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt&#39;)
+<pre><code>fasta = lire_fasta(&#39;/LEBIB_Ines_Projet_Clustal_M2_BI/fichier_fasta.txt&#39;)
 print(&quot;Les séquences protéiques : &quot; , fasta, &quot;\n&quot;)
 </code></pre>
 <p>Plusieurs fonctions vont également prendre en entrée une matrice BLOSUM62, également sous forme de dictionnaire. La matrice BLOSUM62 est une matrice de similarité/substitution. Elle va permettre de définir un score de similarité ou de ressemblance entre deux acides aminés. L’intérêt de cette fonction est d’avoir un dictionnaire les valeurs de substitutions de tous les couples d’acide aminé. Cette fois encore, il faut indiquer le chemin de votre matrice BLOSUM.</p>
@@ -243,6 +245,7 @@ print(&quot;L&#39;arbre fréquentiel de nos séquences est : \n &quot;, arbre_UP
 <p>La dernière étape est de faire un alignement multiple de séquences. Pour cela, il faut utiliser l’algorithme de Needleman &amp; Wunsch. Il va permettre de construire les alignements entre les différentes séquences protéiques. Malheureusement je n’ai pas réussis à faire cela. Mais j’ai tout de même réussis à faire un alignement entre deux séquences protéiques. Le but est de retracer le ‘chemin’ suivant le score maximal des alignements qui donnera l’alignement optimal entre les deux séquences. Cette fonction prend en entrée des séquences (suivant l’ordre de ramification de l’arbre UPGMA), l’arbre UPGMA, la matrice BLOSUM62 et le gap.</p>
 <pre><code>alignement_séquences = alignement_needleman_wunsch(fasta, arbre_UPGMA, blosum62, gap)
 print(&quot;Alignement des séquences : \n &quot;, alignement_séquences, &quot;\n&quot;)</code></pre>
+</div>
 </div>
 </div>
 
