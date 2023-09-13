@@ -34,7 +34,7 @@ Le répertoire dans lequel est stocké le projet contient :
 - Le script python : *LEBIB_Ines_Projet_Clustal_script.py*
 - Le JupyterLab : *LEBIB_Ines_Projet_Clustal_Jupyter_Lab.ipynb*
 - Le rapport du projet sous format pdf : *LEBIB_Ines_Rapport_Clustal_Projet.pdf*
-- [Le lien du github : ](https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI) https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI
+- [Le lien du github :](https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI) https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI
 
 
 
