@@ -169,7 +169,7 @@ pre code {
 <p>13/09/2023</p>
 <div id="alignement-multiple-heuristique-par-la-méthode-clustal" class="section level3">
 <h3><strong>Alignement multiple heuristique par la méthode Clustal</strong></h3>
-<p>L’objectif de ce projet est de réaliser un script Python qui reprend une méthode décrite dans un article écrit par Desmond G. Higgins et Paul M. Sharp en Avril 1989 <em>Fast and sensitive multiple sequence alignments on a microcomputer</em>. Les auteurs présentent une méthodologie d’alignement de séquences multiple heuristique par la méthode Clustal. Durant ce projet, nous allons nous intéresser exclusivement aux séquences protéiques.</p>
+<p>L’objectif de ce projet est de réaliser un script Python qui reprend une méthode décrite dans un article écrit par Desmond G. Higgins et Paul M. Sharp en Avril 1989 <a href="https://pubmed.ncbi.nlm.nih.gov/2720464/"><em>Fast and sensitive multiple sequence alignments on a microcomputer</em></a>. Les auteurs présentent une méthodologie d’alignement de séquences multiple heuristique par la méthode Clustal. Durant ce projet, nous allons nous intéresser exclusivement aux séquences protéiques.</p>
 <div id="introduction" class="section level4">
 <h4><strong>Introduction</strong></h4>
 <p>De nombreuses stratégies ont été mis en place afin de faire un alignement multiple. Nous allons nous nous intéresser à la méthode de programmation dynamique de Needleman &amp; Wunsch (1970) et la méthode UPGMA (Sneath et Sokal, 1973) pour construire un arbre enraciné.</p>
@@ -184,6 +184,7 @@ pre code {
 <li>Le script python : <em>LEBIB_Ines_Projet_Clustal_script.py</em></li>
 <li>Le JupyterLab : <em>LEBIB_Ines_Projet_Clustal_Jupyter_Lab.ipynb</em></li>
 <li>Le rapport du projet sous format pdf : <em>LEBIB_Ines_Rapport_Clustal_Projet.pdf</em></li>
+<li><a href="https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI">Le lien du github :</a> <a href="https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI" class="uri">https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI</a></li>
 </ul>
 </div>
 <div id="packages" class="section level4">
@@ -198,12 +199,12 @@ from scipy.cluster.hierarchy import dendrogram, linkage</code></pre>
 <p>Afin de pouvoir utiliser au mieux le code, certaines fonctions vont être utiles.</p>
 <p>Pour le déroulement optimal de notre script, nous aurons besoin d’avoir des séquences protéiques au format FASTA sous forme de dictionnaire.</p>
 <p>A partir d’un fichier texte contenant toutes les séquences FASTA à aligner, indiquez le chemin de votre fichier et exécuter cette ligne de commande afin de créer le dicionnaire :</p>
-<pre><code>fasta = lire_fasta(&#39;path/Fichier_fasta_2.txt&#39;)
+<pre><code>fasta = lire_fasta(&#39;/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt&#39;)
 print(&quot;Les séquences protéiques : &quot; , fasta, &quot;\n&quot;)
 </code></pre>
 <p>Plusieurs fonctions vont également prendre en entrée une matrice BLOSUM62, également sous forme de dictionnaire. La matrice BLOSUM62 est une matrice de similarité/substitution. Elle va permettre de définir un score de similarité ou de ressemblance entre deux acides aminés. L’intérêt de cette fonction est d’avoir un dictionnaire les valeurs de substitutions de tous les couples d’acide aminé. Cette fois encore, il faut indiquer le chemin de votre matrice BLOSUM.</p>
 <p>La commande pour exécuter cette fonction est :</p>
-<pre><code>blosum62 = lire_blosum62(&#39;path/Blosum62.txt&#39;)
+<pre><code>blosum62 = lire_blosum62(&#39;/LEBIB_Ines_Projet_Clustal_M2_BI/Blosum62.txt&#39;)
 print(&quot;Le dictionnaire de la matrice BLOSUM62 : &quot;, blosum62,  &quot;\n&quot;)
 </code></pre>
 <p>Le dernier pré-requis est la valeur du gap. Le gap est une valeur de pénalité fixe pour chaque écart, ici la valeur du gap est -5.</p>

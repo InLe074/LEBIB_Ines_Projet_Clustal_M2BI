@@ -12,7 +12,7 @@ Projet court Clustal
 ### **Alignement multiple heuristique par la méthode Clustal** ###
 
 
-L'objectif de ce projet est de réaliser un script Python qui reprend une méthode décrite dans un article écrit par Desmond G. Higgins et Paul M. Sharp en Avril 1989 *Fast and sensitive multiple sequence alignments on a microcomputer*. Les auteurs présentent une méthodologie d'alignement de séquences multiple heuristique par la méthode Clustal. 
+L'objectif de ce projet est de réaliser un script Python qui reprend une méthode décrite dans un article écrit par Desmond G. Higgins et Paul M. Sharp en Avril 1989 [*Fast and sensitive multiple sequence alignments on a microcomputer*](https://pubmed.ncbi.nlm.nih.gov/2720464/). Les auteurs présentent une méthodologie d'alignement de séquences multiple heuristique par la méthode Clustal. 
 Durant ce projet, nous allons nous intéresser exclusivement aux séquences protéiques. 
 
 
@@ -33,7 +33,7 @@ Le répertoire dans lequel est stocké le projet contient :
 - Le script python : *LEBIB_Ines_Projet_Clustal_script.py*
 - Le JupyterLab : *LEBIB_Ines_Projet_Clustal_Jupyter_Lab.ipynb*
 - Le rapport du projet sous format pdf : *LEBIB_Ines_Rapport_Clustal_Projet.pdf*
-
+- [Le lien du github : ](https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI) https://github.com/InLe074/LEBIB_Ines_Projet_Clustal_M2BI
 
 
 
@@ -58,7 +58,7 @@ Pour le déroulement optimal de notre script, nous aurons besoin d'avoir des sé
 A partir d'un fichier texte contenant toutes les séquences FASTA à aligner, indiquez le chemin de votre fichier et exécuter cette ligne de commande afin de créer le dicionnaire :
 
 ```
-fasta = lire_fasta('path/Fichier_fasta_2.txt')
+fasta = lire_fasta('/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt')
 print("Les séquences protéiques : " , fasta, "\n")
 
 ```
@@ -68,7 +68,7 @@ Plusieurs fonctions vont également prendre en entrée une matrice BLOSUM62, ég
 La commande pour exécuter cette fonction est : 
 
 ```
-blosum62 = lire_blosum62('path/Blosum62.txt')
+blosum62 = lire_blosum62('/LEBIB_Ines_Projet_Clustal_M2_BI/Blosum62.txt')
 print("Le dictionnaire de la matrice BLOSUM62 : ", blosum62,  "\n")
 
 ```

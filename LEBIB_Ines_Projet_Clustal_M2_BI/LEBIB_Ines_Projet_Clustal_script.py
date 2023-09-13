@@ -395,11 +395,11 @@ if __name__ == '__main__':
     gap = -5
     print("La valeur du gap ici vaut : ", gap , "\n")
 
-    fasta = lire_fasta('c:/Users/Bismilah/Desktop/M1-IPFB/M2_BI/BQ4CY010/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt')
+    fasta = lire_fasta('/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt')
     # print("Les séquences protéiques : " , fasta, "\n")
  
     
-    blosum62 = lire_blosum62('c:/Users/Bismilah/Desktop/M1-IPFB/M2_BI/BQ4CY010/LEBIB_Ines_Projet_Clustal_M2_BI/Blosum62.txt')
+    blosum62 = lire_blosum62('/LEBIB_Ines_Projet_Clustal_M2_BI/Blosum62.txt')
     # print("Le dictionnaire de la matrice BLOSUM62 : ", blosum62,  "\n")
     
     score = score_needleman_wunsch(fasta[1], fasta[2], blosum62, gap)
