@@ -1,4 +1,9 @@
+import time
 import numpy as np
+# import matplotlib.pyplot as plt
+# from scipy.cluster.hierarchy import dendrogram, linkage
+
+tps1 = time.time()
 
 '''
 La fonction lire_fasta() est une fonction qui prend en entrée un fichier texte
@@ -42,12 +47,14 @@ stocker les données de la matrice sous forme de dictionnaire
 def lire_blosum62(fichier_blosum):
     
     '''
+    Va retourner la matrice BLOSUM62 en dictionnaire
     
         Parameters :
+            Fichier texte de la matrice BLOSUM
 
         
         Returns :
-
+            Dictionnaire de la matrice BLOSUM qui contient tous les scores par pair
 
     '''
     
@@ -85,19 +92,21 @@ calculer le score d'alignement optimal entre deux séquences
 Cette fonction se base sur l'algorithme de Needleman-Wunsch
 Elle prend en entrée deux séquences (pour les alignées) ,
 une matrice BLOSUM (ici 62) et une pénalité de gap
-On verra que le gap peut représenter une insertion ou
-une suppression d'éléments
+
 '''
 
 def score_needleman_wunsch(seq1, seq2, blosum62, gap):
 
     '''
+    Va permettre de retourner un score d'alignement optimal entre deux séquences
     
         Parameters :
-
+            seq 1, seq 2 = string de nos séquences
+            blosum62 : un dictionnaire de notre matrice BLOSUM62
+            gap = un entier, ici il vaut -5
         
         Returns :
-
+            Un score de l'alignement en int
 
     '''
     
@@ -112,6 +121,8 @@ def score_needleman_wunsch(seq1, seq2, blosum62, gap):
         score[i][0] = gap * i
     for j in range(n + 1):
         score[0][j] = gap * j
+        
+        
     '''
     On calcule le score pour toutes les positions i et j
     (en excluant la première ligne et la première colonne)
@@ -119,29 +130,37 @@ def score_needleman_wunsch(seq1, seq2, blosum62, gap):
     avoir suivant les cases précédentes et on prend
     le score maximal des trois scores possibles
     '''
+    
     for i in range(1, m + 1):
         for j in range(1, n + 1):
             score_match = score[i - 1][j - 1] + blosum62[seq1[i - 1]][seq2[j - 1]]
             score_suppr = score[i - 1][j] + gap
             score_inser = score[i][j - 1] + gap
             score[i][j] = max(score_match, score_suppr, score_inser)
-
+            
+    # On retourne la dernière valeur de la matrice (dernière case en bas à droite)
     return score[m][n]
 
+
 '''
-La fonction matrice_distance() est une fonction qui permet de
-calculer la matrice des distances entre toutes les séquences
+La fonction matrice_score() est une fonction qui permet de
+calculer la matrice des score entre toutes les séquences
 contenues dans le fichier FASTA
 '''
 
-def matrice_score(fichier_fasta, blosum62, gap) :
+def matrice_score(fichier_fasta) :
 
     '''
+    Va afficher la matrice de score pour chaque paire de séquences
     
         Parameters :
+            fichier_fasta = dictionnaire des fichiers fasta
+            blosum62 = dictionnaire de la matrice BLOSUM62
+            gap = valeur de pénalité, un entier, ici il vaut -5                       
 
         
         Returns :
+            score = un tableau de scores de séquences deux à deux
 
 
     '''
@@ -163,16 +182,28 @@ def matrice_score(fichier_fasta, blosum62, gap) :
             
     return score
 
+'''
+La fonction matrice_distance() permet de convertir la matrice de score en
+matrice de distance. Le but est de ne pas avoir de valeurs négatives
+dans la matrice
+
+Auparavant, les scores les plus élevées signifiaient deux séquences proches.
+
+Avec la matrice des distances, une distance petite, signifie
+des séquences proches.
+
+'''
 
 def matrice_distance(matrice_score) :
 
     '''
+    Va convertir une matrice de score en matrice de distance
     
         Parameters :
-
+            matrice_score = tableau de scores de séquences deux à deux
         
         Returns :
-
+            matrice_dist = tableau de distances de séquences deux à deux
 
     '''
     
@@ -186,28 +217,27 @@ def matrice_distance(matrice_score) :
         for j in range(i+1, len(matrice_score)) :
             matrice_dist[i, j] = dist_max - (matrice_score[i,j] + dist_min)
             matrice_dist[j, i] = matrice_dist[i, j]
+            
     return matrice_dist
     
 
 '''                     
-La fonction ConstruireArbre permet de construire un arbre à
-partir d'une matrice de distances
+La fonction ConstruireArbre permet de construire un arbre à partir d'une matrice de distances
 Il utilise le principe de construction d'un arbre UPGMA
-(Unweighted Pair Group Method with Arithmetic Mean)
-mais de manière plus incrémentale
+(Unweighted Pair Group Method with Arithmetic Mean) mais de manière incrémentale
 '''
 
-##### CHANGER LES MAX EN MIN 
 
 def ConstruireArbre(MatriceDistance):
     
     '''
+    Va construire un arbre incrémentiel grâce à la méthode UPGMA
     
         Parameters :
-
+            MatriceDistance = tableau de distances de séquences deux à deux
         
         Returns :
-
+            tree = un arbre UPGMA de nos séquences
 
     '''
     
@@ -228,11 +258,11 @@ def ConstruireArbre(MatriceDistance):
                 if distance < min_distance:
                     min_distance = distance
                     min_indices = (i, j)
-        # Les deux clusters les plus proches sont stockés dans x et y 
+        # Les coordonnées des deux clusters les plus proches sont stockés dans x et y 
         x, y = min_indices
 
 
-        # Les deux clusters les plus proches sont fusionnés
+        # Les deux clusters les plus proches sont fusionnés en un seul cluster
         new_cluster = clusters[x] + clusters[y]
         clusters.append(new_cluster)
 
@@ -252,104 +282,158 @@ def ConstruireArbre(MatriceDistance):
         # Les clusteurs les plus proches sont supprimés
         del clusters[max(x, y)]
         del clusters[min(x, y)]
-
-    return clusters[0]
-
-
-
-def alignement_needleman_wunsch(sequence, blosum62, gap):
-
-    '''
-    
-        Parameters :
-
         
-        Returns :
+    tree = clusters[0]
+    for i in range(len(tree)) :
+        tree[i] = tree[i]+1
+    
+    return tree
 
+'''
+La fonction alignement_needleman_wunsch() permet de réaliser
+l'alignement entre deux séquences à l'aide de l'algorithme
+de Needleman & Wunsch
+'''
 
+def alignement_needleman_wunsch(sequences, arbre, blosum62, gap):
+    '''
+    Va nous permettre de visualiser les alignements entre deux séquences
+    
+    Parameters:
+        sequence: qui sont des séquences issues des fichiers fasta
+        arbre : arbre fréquentiel des séquences
+        blosum62: dictionnaire de la matrice BLOSUM62
+        gap: valeur de pénalité, un entier, ici il vaut -5
+        
+    Returns:
+        Va nous retourner les alignements de séquences
     '''
     
-    m, n = len(sequence[0]), len(sequence[1])
-    score = [[0] * (n + 1) for i in range(m + 1)]
+    # On extrait les deux séquences à alignées
+    seq1 = fasta[arbre_UPGMA[0]]
+    seq2 = fasta[arbre_UPGMA[1]]         
 
-    # Initialisation
+    m = len(seq1)
+    n = len(seq2)
+    
+    score_alignement = [[0] * (n + 1) for i in range(m + 1)]
+
     for i in range(m + 1):
-        score[i][0] = gap * i
+        score_alignement[i][0] = gap * i
     for j in range(n + 1):
-        score[0][j] = gap * j
+        score_alignement[0][j] = gap * j
 
-    # Remplissage
     for i in range(1, m + 1):
         for j in range(1, n + 1):
-            score_match = score[i - 1][j - 1] + blosum62[sequence[0][i - 1]][sequence[1][j - 1]]
-            score_suppr = score[i - 1][j] + gap
-            score_inser = score[i][j - 1] + gap
-            score[i][j] = max(score_match, score_suppr, score_inser)
-
-
-
-    # Traceback et création des alignements
+            score_match = score_alignement[i - 1][j - 1] + blosum62[seq1[i - 1]][seq2[j - 1]]
+            score_suppr = score_alignement[i - 1][j] + gap
+            score_inser = score_alignement[i][j - 1] + gap
+            score_alignement[i][j] = max(score_match, score_suppr, score_inser)
+            
+            
+    # Tracement des alignements
     alignment_a, alignment_b = "", ""
     i, j = m, n
+    
     while i > 0 and j > 0:
-        score_case = score[i][j]
-        score_diag = score[i - 1][j - 1]
-        score_up = score[i][j - 1]
-        score_left = score[i - 1][j]
-
-        if score_case == score_diag + blosum62[sequence[0][i - 1]][sequence[1][j - 1]]:
-            alignment_a += sequence[0][i - 1]
-            alignment_b += sequence[1][j - 1]
+        #On assigne le score de score_alignement suivant la case courante (là où on se situe)
+        score_case = score_alignement[i][j]
+        score_diag = score_alignement[i - 1][j - 1]
+        score_up = score_alignement[i][j - 1]
+        score_left = score_alignement[i - 1][j]
+        
+        ## Ces conditions servent à verifier quel est le score maximal de ces cases ##
+        
+        # Cas du match de seq1 et seq2 : les deux caractères sont ajoutés dans les
+        # deux alignements et on recule en diagonale
+        if score_case == score_diag + blosum62[seq1[i - 1]][seq2[j - 1]]:
+            alignment_a += seq1[i - 1]
+            alignment_b += seq2[j - 1]
             i -= 1
             j -= 1
+            
+        # Cas de l'insertion/gap dans seq1 :
+        # on ajoute le caractère de seq2 dans alignment_b
+        # et on insert un gap à alignment_a
+        # On passe à la case du haut
         elif score_case == score_up + gap:
             alignment_a += '-'
-            alignment_b += sequence[1][j - 1]
+            alignment_b += seq2[j - 1]
             j -= 1
+
+        # Cas de l'insertion/gap dans seq2 :
+        # on ajoute le caractère de seq1 dans alignment_a
+        # et on insert un gap à alignment_b
+        # On passe à la case de gauche
+        
         elif score_case == score_left + gap:
-            alignment_a += sequence[0][i - 1]
+            alignment_a += seq1[i - 1]
             alignment_b += '-'
             i -= 1
-
+            
+    # On complète l'alignement jusqu'à ce que i et j atteignent
+    # tous les deux 0
+    
     while i > 0:
-        alignment_a += sequence[0][i - 1]
+        alignment_a += seq1[i - 1]
         alignment_b += '-'
         i -= 1
     while j > 0:
         alignment_a += '-'
-        alignment_b += sequence[1][j - 1]
+        alignment_b += seq2[j - 1]
         j -= 1
 
+    # Inverse l'ordre pour avoir les bonnes séquences
     alignment_a = alignment_a[::-1]
     alignment_b = alignment_b[::-1]
 
     return alignment_a, alignment_b
-
-
-
+    
 
 if __name__ == '__main__':
     
     gap = -5
     print("La valeur du gap ici vaut : ", gap , "\n")
 
-    fasta = lire_fasta('c:/Users/Bismilah/Desktop/M1-IPFB/M2_BI/BQ4CY010/Fichier_fasta_2.txt')
+    fasta = lire_fasta('c:/Users/Bismilah/Desktop/M1-IPFB/M2_BI/BQ4CY010/LEBIB_Ines_Projet_Clustal_M2_BI/Fichier_fasta_2.txt')
     # print("Les séquences protéiques : " , fasta, "\n")
+ 
     
-    blosum62 = lire_blosum62('c:/Users/Bismilah/Desktop/M1-IPFB/M2_BI/BQ4CY010/Blosum62.txt')
+    blosum62 = lire_blosum62('c:/Users/Bismilah/Desktop/M1-IPFB/M2_BI/BQ4CY010/LEBIB_Ines_Projet_Clustal_M2_BI/Blosum62.txt')
     # print("Le dictionnaire de la matrice BLOSUM62 : ", blosum62,  "\n")
     
     score = score_needleman_wunsch(fasta[1], fasta[2], blosum62, gap)
     print("Score d'alignement:", score , "\n")
 
-    matrice_des_scores = matrice_score(fasta, blosum62, gap)
+    matrice_des_scores = matrice_score(fasta)
     print("La matrice des scores est : \n", matrice_des_scores, "\n")
     
     matrice_des_distances = matrice_distance(matrice_des_scores)
     print("La matrice des distances est : \n", matrice_des_distances, "\n")
+    
+    '''
+
+    # Pour affichier l'arbre : 
+
+    dendro = linkage(matrice_des_distances, method='average')
+
+    # Plot du dendrogramme :
+    
+    plt.figure(figsize=(20, 20))
+    dendrogram(dendro)
+    plt.title('Arbre UPGMA')
+    plt.xlabel('Seq_ID')
+    plt.ylabel('Distance')
+    plt.show()
+    
+    '''
         
     arbre_UPGMA = ConstruireArbre(matrice_des_distances)
     print("L'arbre fréquentiel de nos séquences est : \n ", arbre_UPGMA, "\n")
 
+    alignement_séquences = alignement_needleman_wunsch(fasta, arbre_UPGMA, blosum62, gap)
+    print("Alignement des séquences : \n ", alignement_séquences, "\n")
 
+    tps2 = time.time()
+    print(f"Le temps d'exécution du code pour 10 séquences de 400 acides aminés en moyenne est : {tps2 - tps1:.3} secondes \n")
 
